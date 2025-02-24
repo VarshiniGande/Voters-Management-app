@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+    .form-container {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        width: 350px;
+    }
+    .form-container h2 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    .form-group {
+        margin-bottom: 15px;
+    }
+    .form-group label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+    .form-group input {
+        width: 95%;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 14px;
+    }
+    .form-group input:focus {
+        border-color: #007bff;
+        outline: none;
+    }
+    .form-group select {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 14px;
+    }
+    .submit-btn {
+        width: 100%;
+        padding: 10px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+    .submit-btn:hover {
+        background-color: #0056b3;
+    }
+</style>
+<body>
+    <div class="form-container">
+        <h2>Add Voter</h2>
+        <div id="voterForm">
+            <div class="form-group">
+                <label >Name:</label>
+                <input type="text" id="name" name="name">
+            </div>
+            <div class="form-group">
+                <label >Age:</label>
+                <input type="text" id="age" name="age">
+            </div>
+            <div class="form-group">
+                <label >Gender:</label>
+                <select id="gender" name="gender">
+                    <option value="Female">Female</option>
+                    <option value="Male">Male</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label >City:</label>
+                <input type="text" id="city" name="city">
+            </div>
+            <div class="form-group">
+                <label >Has Voted:</label>
+                <select id="hasVoted" name="voted">
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                </select>
+            </div>
+            
+            <button type="button" class="submit-btn" onclick="handleAdd()">Submit</button>
+        </div>
+    </div>
+<script>
+    function handleAdd() {
+            const name = document.getElementById('name').value;
+            const age = document.getElementById('age').value;
+            const gender = document.getElementById('gender').value;
+            const city = document.getElementById('city').value;
+            const hasVoted = document.getElementById('hasVoted').value;
+            
+            const requestBody = {
+                name: name,
+                age: age,
+                gender: gender,
+                location:{
+                    city: city
+                },
+                hasVoted: hasVoted,
+            };
+            const stringifedRequestBody = JSON.stringify(requestBody);
+            const httpRequest = new XMLHttpRequest();
+            httpRequest.open('POST', 'http://localhost:4001/voters/' );
+            httpRequest.setRequestHeader('content-type', 'application/json');
+            httpRequest.send(stringifedRequestBody);
+            httpRequest.onreadystatechange = function () {
+                if (httpRequest.readyState === 4) {
+                    window.alert('Added details successfully');
+                    window.location.href = 'voters-list.html';
+                }
+            }
+
+        }
+</script>
+</body>
+</html>

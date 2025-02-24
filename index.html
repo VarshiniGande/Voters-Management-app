@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    #voters-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        padding: 20px;
+        justify-content: center;
+    }
+
+    .voters-card {
+        background: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        width: 250px;
+        text-align: left;
+        /* transition: transform 0.3s ease-in-out; */
+    }
+
+    .voters-card:hover {
+        transform: scale(1.05);
+    }
+
+    .voters-card p {
+        margin: 5px 0;
+        font-size: 16px;
+        color: #333;
+    }
+
+    .actions {
+        margin-top: 15px;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    button {
+        padding: 8px 12px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 14px;
+        /* transition: background 0.3s; */
+    }
+
+    .edit-btn {
+        background: #4CAF50;
+        color: white;
+    }
+
+    .edit-btn:hover {
+        background: #45a049;
+    }
+
+    .delete-btn {
+        background: #f44336;
+        color: white;
+    }
+
+    .delete-btn:hover {
+        background: #d32f2f;
+    }
+
+    .heading {
+        text-align: center;
+    }
+
+    #addVoter {
+        display: flex;
+        justify-content: flex-end;
+        margin-right: 20px;
+        a {
+            background-color: blue;
+            color: white;
+            border-radius: 10px;
+            text-align: right;
+            padding: 12px;
+        }
+    }
+</style>
+
+<body>
+    <h2 class="heading">Voters List</h2>
+    <div id="addVoter">
+        <a href="add-voter.html">+Add Voter</a>
+    </div>
+    <div id="voters-list">
+        <!-- <div class="voters-card">
+            <p>Name:</p>
+            <p>Age:</p>
+            <p>Gender:</p>
+            <p>City:</p>
+            <p>Has Voted:</p>
+            <div class="actions">
+                <button class="edit-btn" onclick="handleEdit()">Edit</button>
+                <button class="delete-btn" onclick="handleDelete()">Delete</button>
+            </div> -->
+        </div>
+
+    <script>
+        let voters = [];
+
+        function getVotersList() {
+            const httpRequest = new XMLHttpRequest();
+            httpRequest.open('GET', `http://localhost:4001/voters`);
+            httpRequest.send();
+
+            httpRequest.onreadystatechange = function () {
+                if (httpRequest.readyState === 4) {
+                    const response = JSON.parse(httpRequest.responseText);
+                    voters = response;
+                    displayVoters();
+                }
+            }
+        }
+        getVotersList();
+
+        function displayVoters() {
+            const container = document.getElementById('voters-list');
+            container.innerHTML = '';
+            voters.forEach(function (voter) {
+                const voterCard = document.createElement('div');
+                voterCard.classList.add('voters-card');
+                voterCard.innerHTML = `
+                    <p>Name: ${voter.name}</p>
+                    <p>Age: ${voter.age}</p>
+                    <p>Gender: ${voter.gender}</p>
+                    <p>City: ${voter.location.city}</p>
+                    <p>Has Voted: ${voter.hasVoted ? 'Yes' : 'No'}</p>
+                    <div class="actions">
+                        <button class="edit-btn" onclick="handleEdit('${voter.id}')">Edit</button>
+                        <button class="delete-btn" onclick="handleDelete('${voter.id}')">Delete</button>
+                    </div>
+                `;
+                container.appendChild(voterCard);
+            });
+        }
+
+        function handleDelete(voterId){
+            const httpRequest = new XMLHttpRequest();
+            httpRequest.open('DELETE', `http://localhost:4001/voters/` + voterId);
+            httpRequest.send();
+            httpRequest.onreadystatechange = function () {
+                if (httpRequest.readyState === 4) {
+                    getVotersList();
+                }
+            }
+        }
+
+        function handleEdit(voterId) {
+            window.location.href = `edit-voter.html?voterId=${voterId}`;
+        }
+    </script>
+</body>
+
+</html>
