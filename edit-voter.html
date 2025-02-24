@@ -108,7 +108,7 @@
 
         function getVoterDetails() {
             const httpRequest = new XMLHttpRequest();
-            httpRequest.open('GET', 'http://localhost:4001/voters/' + voterId);
+            httpRequest.open('GET', 'https://voters-management-app.onrender.com/voters/' + voterId);
             httpRequest.send();
 
             httpRequest.onreadystatechange = function () {
@@ -145,13 +145,13 @@
 
             const stringifedRequestBody = JSON.stringify(requestBody);
             const httpRequest = new XMLHttpRequest();
-            httpRequest.open('PUT', 'http://localhost:4001/voters/' + voterId);
+            httpRequest.open('PUT', 'https://voters-management-app.onrender.com/voters/' + voterId);
             httpRequest.setRequestHeader('content-type', 'application/json');
             httpRequest.send(stringifedRequestBody);
             httpRequest.onreadystatechange = function () {
                 if (httpRequest.readyState === 4) {
                     window.alert('Updated details successfully');
-                    window.location.href = 'voters-list.html';
+                    window.location.href = 'index.html';
                 }
             }
 
